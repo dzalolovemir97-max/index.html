@@ -1,2 +1,287 @@
 # index.html
 Био
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эмир — 15 лет</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Стартовый экран */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        #welcome-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .welcome-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.45;
+            filter: brightness(0.6);
+        }
+
+        .enter-btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 16px 48px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .enter-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Основной сайт */
+        #main-site {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #main-site.visible {
+            opacity: 1;
+        }
+
+        /* Верхняя панель иконок */
+        .top-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px 0 10px;
+            border-bottom: 1px solid #1f1f1f;
+            margin-bottom: 24px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: #fff;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            margin-bottom: 4px;
+            fill: currentColor;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Заголовок ника */
+        .site-logo {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        /* Блок профиля */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .avatar-container {
+            width: 75px;
+            height: 75px;
+            border: 2px solid #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #222;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Информационные строки */
+        .info-section {
+            margin-bottom: 30px;
+        }
+
+        .bio-text {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: #777;
+        }
+
+        .info-value {
+            color: #fff;
+            text-align: right;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .info-value:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Стартовый экран -->
+    <div id="welcome-screen">
+        <video class="welcome-bg" autoplay muted loop playsinline>
+            <source src="bg.mp4" type="video/mp4">
+        </video>
+        <button class="enter-btn" onclick="enterSite()">Войти</button>
+    </div>
+
+    <!-- Основной сайт -->
+    <div id="main-site">
+        <div class="top-nav">
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span class="nav-label">Профиль</span>
+            </div>
+            <a href="https://t.me/borzGreat" target="_blank" class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2.5 11.5c-.3.2-2.1 1.2-3.1 1.7-.3.1-.6-.1-.7-.4-.3-.7-1.1-2.4-1.4-2.9l-.6-.8c-.1-.1-.3-.2-.4-.2-.1 0-.3.1-.3.2l-.7 1.8c-.2.4-.6.7-1 .8-.5.2-1.2.5-2.2 1.3-.9.7-1.5 1.2-1.7 1.4-.2.2-.2.5 0 .7.2.2.5.2.7.2 1 0 2.2-.5 3.3-1.1 1.1-.6 2.3-1.4 3.2-2.1.2-.2.5-.2.7 0 .2.2.5.4.8.7.3.3.6.6.8.8.2.2.5.2.7 0 .2-.2.5-.5.7-.8.2-.3.4-.6.6-.9.2-.3.2-.6 0-.8z"/></svg>
+                <span class="nav-label">Telegram</span>
+            </a>
+            <a href="https://www.tiktok.com/@great.warior" target="_blank" class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z"/></svg>
+                <span class="nav-label">TikTok</span>
+            </a>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span class="nav-label">Инфо</span>
+            </div>
+        </div>
+
+        <div class="site-logo">EMIR</div>
+
+        <div class="profile-card">
+            <div class="avatar-container">
+                <img src="avatar.jpg" alt="Эмир" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'75\' height=\'75\' fill=\'%23555\'><rect width=\'75\' height=\'75\'/></svg>'">
+            </div>
+            <div class="profile-info">
+                <h1>Эмир, 15 лет</h1>
+                <p>Подробнее — ниже.</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="bio-text">
+                Добро пожаловать на мой мини-сайт. Занимаюсь перепродажей аккаунтов.
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Занятия</span>
+                <span class="info-value">Перепродажа аккаунтов</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Telegram</span>
+                <a href="https://t.me/borzGreat" target="_blank" class="info-value">@borzGreat</a>
+            </div>
+            <div class="info-row">
+                <span class="info-label">TikTok</span>
+                <a href="https://www.tiktok.com/@great.warior" target="_blank" class="info-value">@great.warior</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function enterSite() {
+            const welcome = document.getElementById('welcome-screen');
+            const main = document.getElementById('main-site');
+            
+            welcome.classList.add('hidden');
+            main.classList.add('visible');
+        }
+    </script>
+</body>
+</html>
